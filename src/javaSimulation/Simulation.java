@@ -112,18 +112,6 @@ public class Simulation {
 		}
 	}
 	
-	private void collisionAction() {
-		
-		for (List<Animal> collision : collisionList) {
-			if (collision.get(0).getColor().equals(collision.get(1).getColor())){
-				// Reproduce(Animal1, Animal2)
-			}
-			else {
-				// Attack(Animal1, Animal2)
-			}
-		}
-	}
-	
 	// killAnimal : De-references an animal completely
 	
 	private void killAnimal(Animal animal) {
@@ -132,6 +120,42 @@ public class Simulation {
 		occupiedCells.remove(animal.getPosition());
 		Animals.remove(animal);
 		
+	}
+	
+	// Fight Logic : RED eats GREEN eats Yellow eats RED
+	
+	private void resolveClash(Animal A, Animal B) {
+
+		// RED eats GREEN
+		if ((A.getColor() == CellColor.RED) && (B.getColor() == CellColor.GREEN)) { killAnimal(B); return; }
+		if ((A.getColor() == CellColor.GREEN) && (B.getColor() == CellColor.RED)) { killAnimal(A); return; }
+		
+		// GREEN eats YELLOW 
+		if ((A.getColor() == CellColor.GREEN) && (B.getColor() == CellColor.YELLOW)) { killAnimal(B); return; }
+		if ((A.getColor() == CellColor.YELLOW) && (B.getColor() == CellColor.GREEN)) { killAnimal(A); return; }
+		
+		// YELLOW eats RED
+		if ((A.getColor() == CellColor.YELLOW) && (B.getColor() == CellColor.RED)) { killAnimal(B); return; }
+		if ((A.getColor() == CellColor.RED) && (B.getColor() == CellColor.YELLOW)) { killAnimal(A); return; }
+		
+	}
+	
+	// collisionAction : decides what to do for each occurring collision on the grid
+	
+	private void collisionAction() {
+		
+		for (List<Animal> collision : collisionList) {
+			
+			Animal A = collision.get(0);
+			Animal B = collision.get(1);
+			
+			if (A.getColor() == B.getColor()){
+				// Reproduce(Animal1, Animal2)
+			}
+			else {
+				resolveClash(A, B);
+			}
+		}
 	}
 	
 	// Step Method : Describes what will happen at each TimeStep : reproduce, kill and move.
