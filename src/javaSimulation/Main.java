@@ -14,9 +14,7 @@ public class Main {
 		
 		Simulation sim1 = new Simulation(grid);
 		sim1.Spawn();
-		System.out.println(sim1.getRedCount());
-		System.out.println(sim1.getGreenCount());
-		System.out.println(sim1.getYellowCount());
+
 		
 		// Frame settings
 		frame.add(grid);
