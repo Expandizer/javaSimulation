@@ -140,6 +140,25 @@ public class Simulation {
 		
 	}
 	
+	// createAnimal : gives birth to a new Animal
+	
+	private Animal createAnimal(Animal parent) {
+		
+		// the new born inherits traits of the parents
+		
+		CellColor color = parent.getColor();
+		Position coordinates = new Position(
+				parent.getPosition().getX()+1, 
+				parent.getPosition().getY()+1
+		);
+		
+		return switch(color) {
+			case RED -> new RedAnimal(coordinates);
+			case GREEN -> new GreenAnimal(coordinates);
+			case YELLOW -> new YellowAnimal(coordinates);
+		};
+	}
+	
 	// collisionAction : decides what to do for each occurring collision on the grid
 	
 	private void collisionAction() {
@@ -150,7 +169,7 @@ public class Simulation {
 			Animal B = collision.get(1);
 			
 			if (A.getColor() == B.getColor()){
-				// Reproduce(Animal1, Animal2)
+				createAnimal(A); // either A or B, they are the same
 			}
 			else {
 				resolveClash(A, B);

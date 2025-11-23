@@ -37,7 +37,6 @@ class RedAnimal extends Animal{
 		
 		return new Position(X,Y);
 	}
-
 }
 
 class GreenAnimal extends Animal{
