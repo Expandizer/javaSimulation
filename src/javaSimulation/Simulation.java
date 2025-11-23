@@ -16,7 +16,6 @@ public class Simulation {
 	private final Grid grid;
 	private final List<Animal> Animals = new ArrayList<>();
 	private final List<List<Animal>> collisionList = new ArrayList<>();
-	private final Set<Cell> blockedCells = new HashSet<>(); // stores the cells where collisions happen, will be used so no more than two animals can collide, if an animal is going there it's movement pattern will change
 	private final int StepDelay = 500; // ms between two steps of the simulation
 	private Timer timer;
 	private double AnimalDensity = 0.10; // 10% of the GridSize is Animals
@@ -92,9 +91,9 @@ public class Simulation {
 		return occupiedCells.contains(pos);
 	}
 		
-	// collisionDetector : detects animal collision and stores them in a list
+	// collisionDetector : detects animal collision and stores the colliding animals 
 	
-	private void collisionDetector() {
+	private void detectCollisions() {
 		
 		collisionList.clear();
 
@@ -105,13 +104,29 @@ public class Simulation {
 	            
 	        	Animal b = Animals.get(j);
 
-	            if (a.getPosition().equals(b.getPosition())) {
+	            if (a.getPosition() == b.getPosition()) {
 	                collisionList.add(new ArrayList<>(Arrays.asList(a, b)));
 	            }
 			}
 		}
 	}
 	
+	// blockCell : if collision exists -> blockCell
+	
+	public void blockCell() {
+		
+		for (List<Animal> collision : collisionList) {
+			
+			Position cellPos = collision.get(0).getPosition();
+			int X = cellPos.getX();
+			int Y = cellPos.getY();
+			
+			// Access the cell with those coordinates and set Blocked as true
+			// Perhaps should be used in Grid or Cell ??!
+		}
+		
+	}
+		
 	// killAnimal : De-references an animal completely
 	
 	private void killAnimal(Animal animal) {
@@ -175,7 +190,7 @@ public class Simulation {
 		
 	}
 	
-	// collisionAction : decides what to do for each occurring collision on the grid
+	// collisionAction : decides what to do for each occurring collision on the grid (Eat or Reproduce)
 	
 	private void collisionAction() {
 		
@@ -184,11 +199,11 @@ public class Simulation {
 			Animal A = collision.get(0);
 			Animal B = collision.get(1);
 			
-			if (A.getColor() == B.getColor()){
-				createAnimal(A); // either A or B, they are the same
+			if (A.getColor() == B.getColor()){ // Make a baby
+				createAnimal(A); 
 				addAnimal(A); 
 			}
-			else {
+			else { // Predator Eats Prey
 				resolveClash(A, B);
 			}
 		}
