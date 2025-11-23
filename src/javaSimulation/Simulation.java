@@ -11,13 +11,12 @@ import java.util.Set;
 
 import javax.swing.Timer;
 
-
 public class Simulation {
 	
 	private final Grid grid;
 	private final List<Animal> Animals = new ArrayList<>();
 	private final List<List<Animal>> collisionList = new ArrayList<>();
-	private final Set<Cell> blockedCells = new HashSet<>(); // used Cell instead of Position in order to manipulate the colors of the blockedCells (where collisions happen)
+	private final Set<Cell> blockedCells = new HashSet<>(); // stores the cells where collisions happen, will be used so no more than two animals can collide, if an animal is going there it's movement pattern will change
 	private final int StepDelay = 500; // ms between two steps of the simulation
 	private Timer timer;
 	private double AnimalDensity = 0.10; // 10% of the GridSize is Animals
@@ -85,7 +84,7 @@ public class Simulation {
 		List<Animal> Animals = this.Animals;
 		
 		for(Animal a : Animals) {
-			this.grid.markAnimal(a);
+			grid.markAnimal(a);
 		}
 	}
 	
@@ -100,6 +99,7 @@ public class Simulation {
 		collisionList.clear();
 
 		for (int i = 0; i < Animals.size(); i++) {
+			
 	        Animal a = Animals.get(i);
 	        for (int j = i + 1; j < Animals.size(); j++) {
 	            
@@ -148,7 +148,7 @@ public class Simulation {
 		
 		CellColor color = parent.getColor();
 		Position coordinates = new Position(
-				parent.getPosition().getX()+1, 
+				parent.getPosition().getX(), 
 				parent.getPosition().getY()+1
 		);
 		
@@ -157,6 +157,22 @@ public class Simulation {
 			case GREEN -> new GreenAnimal(coordinates);
 			case YELLOW -> new YellowAnimal(coordinates);
 		};
+	}
+	
+	// addAnimal : Adds the new born to the list of animals, occupied cells and marks the grid's new cell with the new born
+	
+	private void addAnimal(Animal baby) {
+		
+		Animals.add(baby);
+		grid.markAnimal(baby);
+		occupiedCells.add(baby.getPosition());
+		
+		switch(baby.getColor()) {
+			case RED -> redCount++;
+			case GREEN -> greenCount++;
+			case YELLOW -> yellowCount++;
+		}
+		
 	}
 	
 	// collisionAction : decides what to do for each occurring collision on the grid
@@ -170,6 +186,7 @@ public class Simulation {
 			
 			if (A.getColor() == B.getColor()){
 				createAnimal(A); // either A or B, they are the same
+				addAnimal(A); 
 			}
 			else {
 				resolveClash(A, B);
@@ -183,11 +200,9 @@ public class Simulation {
 	
 		//Cells loop
 			//Collision detector
-				//Same Color condition
-					// Fuck and reproduce
-				//Different Color condition
-					// Kill and the winner lives
+				//collisionAction() 
 			//OutofGrid detector
+			//OutOfGrid Behavior
 	}
 	
 	public int getRedCount() {
