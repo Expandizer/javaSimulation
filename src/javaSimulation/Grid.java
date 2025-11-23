@@ -1,6 +1,10 @@
 package javaSimulation;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.swing.*;
 
 public class Grid extends JPanel {
@@ -13,6 +17,7 @@ public class Grid extends JPanel {
     private int cellPadding; // space between cells
 
     private Cell[][] cells;
+    private final Set<Cell> blockedCells = new HashSet<>(); // stores the cells where collisions happen, will be used so no more than two animals can collide, if an animal is going there it's movement pattern will change
     
     private Color defaultCellColor = new Color(255, 255, 255);
     private Color defaultGridColor = new Color(222, 222, 222);
@@ -46,6 +51,23 @@ public class Grid extends JPanel {
             }
         }
     }
+    
+    // detectBlockedCells : adds Cells that are blocked to blockedCells
+    // Must be executed right after blockCell()
+	
+ 	public void detectBlockedCells() {
+ 		
+ 		for (int row = 0; row < GridSize; row++) {
+            for (int col = 0; col < GridSize; col++) {
+            	
+            	if (cells[row][col].isBlocked()) {
+            		blockedCells.add(cells[row][col]);
+            	}
+            	
+            }
+ 		}	
+ 		
+ 	}
 
     public void colorCell(Position pos, Color color) {
     	
