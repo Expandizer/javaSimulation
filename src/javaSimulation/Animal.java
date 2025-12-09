@@ -21,7 +21,9 @@ public abstract class Animal {
 	public void setPosition(Position pos) {
 		this.position = pos;
 	}
-		
+	
+	public abstract void Move(int gridSize);
+
 }
 
 class RedAnimal extends Animal{
@@ -30,12 +32,13 @@ class RedAnimal extends Animal{
 		super(CellColor.RED, position);
 	}
 	
-	public Position Move(Position pos) {
+	public void Move(int gridSize) {
 		
 		int X = getPosition().getX()+1;
 		int Y = getPosition().getY()-2;
-		
-		return new Position(X,Y);
+	    
+		Position newPos = new Position(X, Y).wrap(gridSize);
+	    setPosition(newPos);
 	}
 }
 
@@ -45,11 +48,13 @@ class GreenAnimal extends Animal{
 		super(CellColor.GREEN, position);
 	}
 	
-	public Position Move(Position pos) {
+	public void Move(int gridSize) {
+		
 		int X = getPosition().getX()-1;
 		int Y = getPosition().getY()+1;
-		
-		return new Position(X,Y);
+	    
+		Position newPos = new Position(X, Y).wrap(gridSize);
+	    setPosition(newPos);
 	}
 	
 }
@@ -60,11 +65,13 @@ class YellowAnimal extends Animal{
 		super(CellColor.YELLOW, position);
 	}
 	
-	public Position Move(Position pos) {
+	public void Move(int gridSize) {
+		
 		int X = getPosition().getX()+1;
 		int Y = getPosition().getY()+1;
-		
-		return new Position(X,Y);
+	    
+		Position newPos = new Position(X, Y).wrap(gridSize);
+	    setPosition(newPos);
 	}
 
 }

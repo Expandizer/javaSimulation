@@ -25,6 +25,13 @@ public class Position {
 	public void setY(int Y) {
 		this.y = Y;
 	}
+	
+	public Position wrap(int gridSize) {
+	    int newX = (x + gridSize) % gridSize;
+	    int newY = (y + gridSize) % gridSize;
+	    return new Position(newX, newY);
+	}
+
 	public String getCoordinates() {
 		return "("+this.x+"," +this.y+")";
 	}

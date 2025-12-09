@@ -16,9 +16,9 @@ public class Grid extends JPanel {
     private int cellLength, cellWidth;
     private int cellPadding; // space between cells
 
-    private Cell[][] cells;
+    public Cell[][] cells;
     private final Set<Cell> blockedCells = new HashSet<>(); // stores the cells where collisions happen, will be used so no more than two animals can collide, if an animal is going there it's movement pattern will change
-    
+    // change Cell w/ Position, so it will store positions and not cells
     private Color defaultCellColor = new Color(255, 255, 255);
     private Color defaultGridColor = new Color(222, 222, 222);
     
@@ -53,16 +53,14 @@ public class Grid extends JPanel {
     }
     
     // detectBlockedCells : adds Cells that are blocked to blockedCells
-    // Must be executed right after blockCell()
+    // Must be executed right after blockCells()
 	
  	public void detectBlockedCells() {
  		
  		for (int row = 0; row < GridSize; row++) {
             for (int col = 0; col < GridSize; col++) {
             	
-            	if (cells[row][col].isBlocked()) {
-            		blockedCells.add(cells[row][col]);
-            	}
+            	if (cells[row][col].isBlocked()) { blockedCells.add(cells[row][col]); }
             	
             }
  		}	
@@ -81,6 +79,17 @@ public class Grid extends JPanel {
         }
     }
 
+	// markCollisions : marks collision cells in black or pink depending on colliding animals
+	
+	public void markCollisions() {
+		
+		for (Cell cell : blockedCells) {
+			Position pos = cell.getPosition();
+			// if animals in that pos are the same color pink else black
+		}
+		
+	}
+	
     public void markAnimal(Animal animal) {
     	
         String colorName = animal.getColor().toString().toUpperCase();

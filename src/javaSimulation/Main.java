@@ -12,9 +12,8 @@ public class Main {
 		
 		Grid grid = new Grid(15,60,60,2);
 		
-		Simulation sim1 = new Simulation(grid);
-		sim1.Spawn();
-
+		Simulation sim1 = new Simulation(grid, 700);
+		sim1.timer.start();
 		
 		// Frame settings
 		frame.add(grid);

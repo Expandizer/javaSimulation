@@ -17,15 +17,17 @@ public class Simulation {
 	private final List<Animal> Animals = new ArrayList<>();
 	private final List<List<Animal>> collisionList = new ArrayList<>();
 	private final int StepDelay = 500; // ms between two steps of the simulation
-	private Timer timer;
+	public Timer timer;
 	private double AnimalDensity = 0.10; // 10% of the GridSize is Animals
 	private int redCount, greenCount, yellowCount;
 	private final List<Position> occupiedCells = new ArrayList<>();
 	
-	public Simulation(Grid grid){
+	public Simulation(Grid grid, int TimeSteps){
 		this.grid = grid;
-		//spawn()
-		//Start Simulation Rules : Spawning, cell updates, movements
+		Spawn();
+		timer = new Timer(TimeSteps, e -> {
+            Step(); // Responsible for simulation rules at each time step
+        });
 	}
 	
 	public void Spawn() {
@@ -111,9 +113,9 @@ public class Simulation {
 		}
 	}
 	
-	// blockCell : if collision exists -> blockCell
+	// blockCells : if collision exists -> blockCells
 	
-	public void blockCell() {
+	public void blockCells() {
 		
 		for (List<Animal> collision : collisionList) {
 			
@@ -121,12 +123,10 @@ public class Simulation {
 			int X = cellPos.getX();
 			int Y = cellPos.getY();
 			
-			// Access the cell with those coordinates and set Blocked as true
-			// Perhaps should be used in Grid or Cell ??!
+			grid.cells[X][Y].setBlocked(true);
 		}
-		
-	}
-		
+	}		
+	
 	// killAnimal : De-references an animal completely
 	
 	private void killAnimal(Animal animal) {
@@ -135,6 +135,15 @@ public class Simulation {
 		occupiedCells.remove(animal.getPosition());
 		Animals.remove(animal);
 		
+	}
+	
+	// moveAnimals : moves all the animals
+	
+	public void moveAnimals() {
+		
+		for (Animal animal : Animals) {
+			animal.Move(grid.GridSize);			
+		}
 	}
 	
 	// Fight Logic : RED eats GREEN eats Yellow eats RED
@@ -212,12 +221,17 @@ public class Simulation {
 	// Step Method : Describes what will happen at each TimeStep : reproduce, kill and move.
 	
 	private void Step() {
-	
-		//Cells loop
-			//Collision detector
-				//collisionAction() 
-			//OutofGrid detector
-			//OutOfGrid Behavior
+		
+		grid.clearGrid();
+		moveAnimals();
+		markAnimals();
+		detectCollisions();
+		blockCells();
+		grid.detectBlockedCells();
+		collisionAction();
+		
+		// Clean BlockedCells every step and execute detection again
+		
 	}
 	
 	public int getRedCount() {
