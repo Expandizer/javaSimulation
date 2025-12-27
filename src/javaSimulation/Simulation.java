@@ -211,9 +211,12 @@ public class Simulation {
 			if (A.getColor() == B.getColor()){ // Make a baby
 				createAnimal(A); 
 				addAnimal(A); 
+				grid.markCollisions(collision);
 			}
 			else { // Predator Eats Prey
 				resolveClash(A, B);
+				grid.markCollisions(collision);
+
 			}
 		}
 	}
