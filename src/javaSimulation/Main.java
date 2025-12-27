@@ -20,6 +20,5 @@ public class Main {
 		frame.pack(); // Sizes the frame based on component sizes
         frame.setLocationRelativeTo(null); // Center the frame
         frame.setVisible(true);
-        
 	}
 }
