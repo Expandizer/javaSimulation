@@ -81,13 +81,18 @@ public class Grid extends JPanel {
 
 	// markCollisions : marks collision cells in black or pink depending on colliding animals
 	
-	public void markCollisions() {
+	public void markCollisions(List<Animal> collision) {
 		
-		for (Cell cell : blockedCells) {
-			Position pos = cell.getPosition();
-			// if animals in that pos are the same color pink else black
-		}
-		
+			if (collision.get(0) == collision.get(1)) {
+				Position clash_pos = collision.get(0).getPosition();
+				clearCell(clash_pos);
+				colorCell(clash_pos, Color.pink);
+			}
+			else {
+				Position clash_pos = collision.get(0).getPosition();
+				clearCell(clash_pos);
+				colorCell(clash_pos, Color.black);
+			}
 	}
 	
     public void markAnimal(Animal animal) {
