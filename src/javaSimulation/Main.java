@@ -12,7 +12,7 @@ public class Main {
 		
 		Grid grid = new Grid(15,60,60,2);
 		
-		Simulation sim1 = new Simulation(grid, 700);
+		Simulation sim1 = new Simulation(grid, 2000);
 		sim1.timer.start();
 		
 		// Frame settings
